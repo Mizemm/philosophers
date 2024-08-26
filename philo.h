@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:44 by mizem             #+#    #+#             */
-/*   Updated: 2024/08/12 15:48:37 by mizem            ###   ########.fr       */
+/*   Updated: 2024/08/23 17:50:07 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,30 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <pthread.h>
+#include <limits.h>
 
 int	ft_atoi(char *str);
+int	ft_strlen(char *s);
+
+
+typedef struct s_philos
+{
+	pthread_t		thread;
+	int				id;
+	int				l_fork;
+	int				r_fork;
+}					t_philos;
+
+typedef struct s_program
+{
+	int				num_of_philos;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				food;
+	pthread_mutex_t *forks;
+	t_philos		*philos;
+}					t_program;
 
 #endif

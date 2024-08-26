@@ -3,7 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror #-fsanitize=address
 
 PHILO_C = philo.c
-UTILS_C = utils/ft_atoi.c
+UTILS_C = utils/ft_atoi.c utils/ft_strlen.c
 
 PHILO_O = $(PHILO_C:.c=.o)
 UTILS_O = $(UTILS_C:.c=.o)
