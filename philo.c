@@ -6,11 +6,15 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/08/30 16:19:56 by mizem            ###   ########.fr       */
+/*   Updated: 2024/08/30 16:52:40 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+// void *is_eating(t_program **prg)
+// {
+// }
 
 size_t	get_current_time(void)
 {
@@ -20,9 +24,6 @@ size_t	get_current_time(void)
 		write(2, "gettimeofday() error\n", 22);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
-// void *is_eating(t_program **prg)
-// {
-// }
 void  *is_usleep(size_t milliseconds)
 {
 	size_t	start;
@@ -119,6 +120,7 @@ int main(int ac, char **av)
 		fill_struct(&prg, ac, av);
 		give_forks(&prg, ft_atoi(av[1]));
 		init_mutex(&prg, ft_atoi(av[1]));
+		printf("i segged\n");
 		create_threads(&prg, ft_atoi(av[1]));
 		printf("num of philos : %d\ntime to die : %d\ntime to eat : %d\ntime to sleep : %d\nfood : %d\n", 
 				prg->num_of_philos, prg->time_to_die, prg->time_to_eat, prg->time_to_sleep, prg->food);
