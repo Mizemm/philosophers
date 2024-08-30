@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:44 by mizem             #+#    #+#             */
-/*   Updated: 2024/08/23 17:50:07 by mizem            ###   ########.fr       */
+/*   Updated: 2024/08/29 15:25:14 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <limits.h>
+#include <unistd.h>
+#include <sys/time.h>
 
 int	ft_atoi(char *str);
 int	ft_strlen(char *s);

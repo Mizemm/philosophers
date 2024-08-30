@@ -6,15 +6,35 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/08/25 15:58:29 by mizem            ###   ########.fr       */
+/*   Updated: 2024/08/29 15:26:09 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void *print(t_program *prg)
+size_t	get_current_time(void)
 {
-	printf("Hello World!\n");
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		write(2, "gettimeofday() error\n", 22);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+}
+
+void  *ft_usleep(size_t milliseconds)
+{
+	size_t	start;
+
+	start = get_current_time();
+	while ((get_current_time() - start) < milliseconds)
+		usleep(500);
+	return (0);
+}
+	
+void *is_thinking(void *arg)
+{
+	(void)arg;
+	printf("Philo is thinking..\n");
 	return NULL;
 }
 void create_threads(t_program **prg, int philos)
@@ -24,7 +44,7 @@ void create_threads(t_program **prg, int philos)
 	i = 0;
 	while (i < philos)
 	{
-		pthread_create(&(*prg)->philos[i].thread, NULL, &print, &(*prg)->philos[i]);
+		pthread_create(&(*prg)->philos[i].thread, NULL, ft_usleep((*prg)->time_to_sleep), &(*prg)->philos[i]);
 		i++;
 	}
 }
@@ -101,4 +121,4 @@ int main(int ac, char **av)
 		printf("num of philos : %d\ntime to die : %d\ntime to eat : %d\ntime to sleep : %d\nfood : %d\n", 
 				prg->num_of_philos, prg->time_to_die, prg->time_to_eat, prg->time_to_sleep, prg->food);
 	}
-}
+} 
