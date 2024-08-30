@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/08/29 15:26:09 by mizem            ###   ########.fr       */
+/*   Updated: 2024/08/30 16:19:56 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ size_t	get_current_time(void)
 		write(2, "gettimeofday() error\n", 22);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
-
-void  *ft_usleep(size_t milliseconds)
+// void *is_eating(t_program **prg)
+// {
+// }
+void  *is_usleep(size_t milliseconds)
 {
 	size_t	start;
 
@@ -44,7 +46,7 @@ void create_threads(t_program **prg, int philos)
 	i = 0;
 	while (i < philos)
 	{
-		pthread_create(&(*prg)->philos[i].thread, NULL, ft_usleep((*prg)->time_to_sleep), &(*prg)->philos[i]);
+		pthread_create(&(*prg)->philos[i].thread, NULL, is_usleep((*prg)->time_to_sleep), &(*prg)->philos[i]);
 		i++;
 	}
 }
