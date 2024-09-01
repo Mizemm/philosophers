@@ -6,15 +6,17 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/08/30 16:52:40 by mizem            ###   ########.fr       */
+/*   Updated: 2024/08/31 13:16:33 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// void *is_eating(t_program **prg)
-// {
-// }
+void *sleep(t_program **prg)
+{
+	is_thinking();
+	return NULL;
+}
 
 size_t	get_current_time(void)
 {
@@ -34,11 +36,9 @@ void  *is_usleep(size_t milliseconds)
 	return (0);
 }
 	
-void *is_thinking(void *arg)
+void is_thinking(t_program **prg)
 {
-	(void)arg;
-	printf("Philo is thinking..\n");
-	return NULL;
+	printf("%d %d is thinking..\n", get_current_time(), (*prg)->philos[i].id);
 }
 void create_threads(t_program **prg, int philos)
 {
@@ -47,7 +47,7 @@ void create_threads(t_program **prg, int philos)
 	i = 0;
 	while (i < philos)
 	{
-		pthread_create(&(*prg)->philos[i].thread, NULL, is_usleep((*prg)->time_to_sleep), &(*prg)->philos[i]);
+		pthread_create(&(*prg)->philos[i].thread, NULL, sleep(prg), &(*prg)->philos[i]);
 		i++;
 	}
 }
