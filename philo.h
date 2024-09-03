@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:44 by mizem             #+#    #+#             */
-/*   Updated: 2024/08/29 15:25:14 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/03 11:26:33 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 int	ft_atoi(char *str);
 int	ft_strlen(char *s);
 
+typedef struct s_program t_program;
 
 typedef struct s_philos
 {
@@ -30,6 +31,7 @@ typedef struct s_philos
 	int				id;
 	int				l_fork;
 	int				r_fork;
+	t_program		*program;
 }					t_philos;
 
 typedef struct s_program
@@ -42,5 +44,7 @@ typedef struct s_program
 	pthread_mutex_t *forks;
 	t_philos		*philos;
 }					t_program;
+
+void *routine(void *philo);
 
 #endif

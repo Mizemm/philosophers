@@ -6,40 +6,12 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/08/31 13:16:33 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/03 11:25:33 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void *sleep(t_program **prg)
-{
-	is_thinking();
-	return NULL;
-}
-
-size_t	get_current_time(void)
-{
-	struct timeval	time;
-
-	if (gettimeofday(&time, NULL) == -1)
-		write(2, "gettimeofday() error\n", 22);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
-void  *is_usleep(size_t milliseconds)
-{
-	size_t	start;
-
-	start = get_current_time();
-	while ((get_current_time() - start) < milliseconds)
-		usleep(500);
-	return (0);
-}
-	
-void is_thinking(t_program **prg)
-{
-	printf("%d %d is thinking..\n", get_current_time(), (*prg)->philos[i].id);
-}
 void create_threads(t_program **prg, int philos)
 {
 	int i;
@@ -47,7 +19,7 @@ void create_threads(t_program **prg, int philos)
 	i = 0;
 	while (i < philos)
 	{
-		pthread_create(&(*prg)->philos[i].thread, NULL, sleep(prg), &(*prg)->philos[i]);
+		pthread_create(&(*prg)->philos[i].thread, NULL, &routine, &(*prg)->philos[i]);
 		i++;
 	}
 }
@@ -105,6 +77,8 @@ void fill_struct(t_program **prg, int ac, char **av)
 	while (i <= ft_atoi(av[1]))
 	{
 		(*prg)->philos[i].id = i + 1;
+		(*prg)->philos[i].program = *prg;
+		
 		if (ac == 6)
 			(*prg)->food = ft_atoi(av[5]);
 		i++;			
