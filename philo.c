@@ -6,12 +6,23 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/03 11:25:33 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/05 12:36:03 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void join_threads(t_program *prg, int philos)
+{
+	int i;
+
+	i = 0;
+	while (i < philos)
+	{
+		pthread_join(prg->philos[i].thread, NULL);
+		i++;
+	}
+}
 void create_threads(t_program **prg, int philos)
 {
 	int i;
@@ -70,9 +81,10 @@ void fill_struct(t_program **prg, int ac, char **av)
 	(*prg)->num_of_philos = ft_atoi(av[1]);
 	(*prg)->time_to_die = ft_atoi(av[2]);
 	(*prg)->time_to_eat = ft_atoi(av[3]);
-	(*prg)->time_to_sleep =
-	 ft_atoi(av[4]);
+	(*prg)->time_to_sleep = ft_atoi(av[4]);
+	(*prg)->start_time = get_current_time();
 	(*prg)->food = -1;
+	(*prg)->is_dead = 0;
 	(*prg)->philos = malloc(sizeof(t_philos) * ft_atoi(av[1]));
 	while (i <= ft_atoi(av[1]))
 	{
@@ -94,9 +106,9 @@ int main(int ac, char **av)
 		fill_struct(&prg, ac, av);
 		give_forks(&prg, ft_atoi(av[1]));
 		init_mutex(&prg, ft_atoi(av[1]));
-		printf("i segged\n");
 		create_threads(&prg, ft_atoi(av[1]));
-		printf("num of philos : %d\ntime to die : %d\ntime to eat : %d\ntime to sleep : %d\nfood : %d\n", 
-				prg->num_of_philos, prg->time_to_die, prg->time_to_eat, prg->time_to_sleep, prg->food);
+		join_threads(prg, ft_atoi(av[1]));
+		// printf("num of philos : %d\ntime to die : %d\ntime to eat : %d\ntime to sleep : %d\nfood : %d\n", 
+		// 		prg->num_of_philos, prg->time_to_die, prg->time_to_eat, prg->time_to_sleep, prg->food);
 	}
 } 

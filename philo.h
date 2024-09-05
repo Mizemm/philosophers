@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:44 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/03 11:26:33 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/05 12:39:44 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_philos
 	int				id;
 	int				l_fork;
 	int				r_fork;
+	int				last_meal;
 	t_program		*program;
 }					t_philos;
 
@@ -41,10 +42,14 @@ typedef struct s_program
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				food;
+	int				start_time;
+	int				is_dead;
 	pthread_mutex_t *forks;
+	pthread_mutex_t print;
 	t_philos		*philos;
 }					t_program;
 
 void *routine(void *philo);
+size_t	get_current_time(void);
 
 #endif
