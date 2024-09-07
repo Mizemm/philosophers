@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/05 12:36:03 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/08 00:57:14 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@ void join_threads(t_program *prg, int philos)
 	{
 		pthread_join(prg->philos[i].thread, NULL);
 		i++;
+	}
+	while (1)
+	{
+		i = 0;
+		while (i < philos)
+		{
+			if (prg->philos[i]->last_meal - get_current_time() >= prg->time_to_eat)
+		}
 	}
 }
 void create_threads(t_program **prg, int philos)
