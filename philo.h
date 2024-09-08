@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:44 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/07 23:49:51 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/08 15:57:50 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_program
 {
 	int				num_of_philos;
 	int				time_to_die;
-	int				time_to_eat;
+	size_t				time_to_eat;
 	int				time_to_sleep;
 	int				food;
 	size_t			start_time;
@@ -52,5 +52,6 @@ typedef struct s_program
 
 void *routine(void *philo);
 size_t	get_current_time(void);
+void is_print(t_philos *philo, char *str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 11:09:42 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/08 00:50:40 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/08 15:55:42 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,14 @@ void  is_usleep(size_t milliseconds)
 
 void is_print(t_philos *philo, char *str)
 {
-	pthread_mutex_lock(&philo->program->print);
-	printf("%zu  %d  %s...\n", (get_current_time() - philo->program->start_time), philo->id, str);
-	pthread_mutex_unlock(&philo->program->print);
+	pthread_mutex_lock(&philo->program->dead_lock);
+	if (philo->program->is_dead == 0)
+	{
+		pthread_mutex_lock(&philo->program->print);
+		printf("%zu  %d  %s...\n", (get_current_time() - philo->program->start_time), philo->id, str);
+		pthread_mutex_unlock(&philo->program->print);
+	}
+	pthread_mutex_unlock(&philo->program->dead_lock);
 }
 
 void is_sleeping(t_philos *philo)

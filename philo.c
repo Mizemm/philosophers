@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/08 00:57:14 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/08 15:58:43 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,30 @@ void join_threads(t_program *prg, int philos)
 		pthread_join(prg->philos[i].thread, NULL);
 		i++;
 	}
-	while (1)
-	{
-		i = 0;
-		while (i < philos)
-		{
-			if (prg->philos[i]->last_meal - get_current_time() >= prg->time_to_eat)
-		}
-	}
 }
-void create_threads(t_program **prg, int philos)
+void create_threads(t_program *prg, int philos)
 {
 	int i;
 
 	i = 0;
 	while (i < philos)
 	{
-		pthread_create(&(*prg)->philos[i].thread, NULL, &routine, &(*prg)->philos[i]);
+		pthread_create(&prg->philos[i].thread, NULL, &routine, &prg->philos[i]);
 		i++;
+	}
+	while (1)
+	{
+		i = 0;
+		while (i < philos)
+		{
+			if (prg->philos[i].last_meal - get_current_time() >= prg->time_to_eat)
+			{
+				pthread_mutex_lock(&prg->dead_lock);
+				is_print(prg->philos, "philo has died");
+				prg->is_dead = 1;
+				pthread_mutex_unlock(&prg->dead_lock);
+			}
+		}
 	}
 }
 void init_mutex(t_program **prg, int philos)
@@ -114,7 +120,7 @@ int main(int ac, char **av)
 		fill_struct(&prg, ac, av);
 		give_forks(&prg, ft_atoi(av[1]));
 		init_mutex(&prg, ft_atoi(av[1]));
-		create_threads(&prg, ft_atoi(av[1]));
+		create_threads(prg, ft_atoi(av[1]));
 		join_threads(prg, ft_atoi(av[1]));
 		// printf("num of philos : %d\ntime to die : %d\ntime to eat : %d\ntime to sleep : %d\nfood : %d\n", 
 		// 		prg->num_of_philos, prg->time_to_die, prg->time_to_eat, prg->time_to_sleep, prg->food);
