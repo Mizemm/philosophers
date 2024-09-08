@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:44 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/08 15:57:50 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/08 22:49:46 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,18 @@ typedef struct s_philos
 
 typedef struct s_program
 {
-	int				num_of_philos;
-	int				time_to_die;
+	size_t				num_of_philos;
+	size_t				time_to_die;
 	size_t				time_to_eat;
-	int				time_to_sleep;
-	int				food;
-	size_t			start_time;
-	int				is_dead;
-	pthread_mutex_t *forks;
-	pthread_mutex_t print;
-	pthread_mutex_t dead_lock;
-	t_philos		*philos;
-}					t_program;
+	size_t				time_to_sleep;
+	size_t				food;
+	size_t				start_time;
+	size_t				is_dead;
+	pthread_mutex_t		*forks;
+	pthread_mutex_t 	print;
+	pthread_mutex_t 	dead_lock;
+	t_philos			*philos;
+}			t_program;
 
 void *routine(void *philo);
 size_t	get_current_time(void);

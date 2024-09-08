@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/08 15:58:43 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/08 23:53:40 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,25 @@ void join_threads(t_program *prg, int philos)
 		i++;
 	}
 }
+int check_deads(t_program *prg, int philos)
+{
+	int i = 0;
+	while (i < philos)
+	{
+		if (get_current_time() - prg->philos[i].last_meal >= prg->time_to_die)
+		{
+			pthread_mutex_lock(&prg->dead_lock);
+			prg->is_dead = 1;
+			pthread_mutex_unlock(&prg->dead_lock);
+			pthread_mutex_lock(&prg->print);
+			printf("%zu  %d  %s...\n", (get_current_time() - prg->start_time), prg->philos[i].id, "philo has died");
+			pthread_mutex_unlock(&prg->print);
+			return (1);
+		}
+		i++;
+	}
+		return (0);
+}
 void create_threads(t_program *prg, int philos)
 {
 	int i;
@@ -35,17 +54,8 @@ void create_threads(t_program *prg, int philos)
 	}
 	while (1)
 	{
-		i = 0;
-		while (i < philos)
-		{
-			if (prg->philos[i].last_meal - get_current_time() >= prg->time_to_eat)
-			{
-				pthread_mutex_lock(&prg->dead_lock);
-				is_print(prg->philos, "philo has died");
-				prg->is_dead = 1;
-				pthread_mutex_unlock(&prg->dead_lock);
-			}
-		}
+		if (check_deads(prg, philos) == 1)
+			break ;
 	}
 }
 void init_mutex(t_program **prg, int philos)
