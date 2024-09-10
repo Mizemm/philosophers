@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/08 23:53:40 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/10 22:43:35 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,22 @@ int check_deads(t_program *prg, int philos)
 	int i = 0;
 	while (i < philos)
 	{
+		pthread_mutex_lock(&prg->last_meal_mut);
 		if (get_current_time() - prg->philos[i].last_meal >= prg->time_to_die)
 		{
 			pthread_mutex_lock(&prg->dead_lock);
 			prg->is_dead = 1;
 			pthread_mutex_unlock(&prg->dead_lock);
 			pthread_mutex_lock(&prg->print);
-			printf("%zu  %d  %s...\n", (get_current_time() - prg->start_time), prg->philos[i].id, "philo has died");
+			printf("%zu %d %s\n", (get_current_time() - prg->start_time), prg->philos[i].id, "died");
 			pthread_mutex_unlock(&prg->print);
+			pthread_mutex_unlock(&prg->last_meal_mut);
 			return (1);
 		}
+		pthread_mutex_unlock(&prg->last_meal_mut);
 		i++;
 	}
-		return (0);
+	return (0);
 }
 void create_threads(t_program *prg, int philos)
 {
@@ -64,6 +67,9 @@ void init_mutex(t_program **prg, int philos)
 
 	i = 0;
 	(*prg)->forks = malloc(philos * sizeof(pthread_mutex_t));
+	pthread_mutex_init(&(*prg)->print, NULL);
+	pthread_mutex_init(&(*prg)->dead_lock, NULL);
+	pthread_mutex_init(&(*prg)->last_meal_mut, NULL);
 	while (i < philos)
 	{
 		pthread_mutex_init(&(*prg)->forks[i], NULL);
@@ -114,6 +120,7 @@ void fill_struct(t_program **prg, int ac, char **av)
 	{
 		(*prg)->philos[i].id = i + 1;
 		(*prg)->philos[i].program = *prg;
+		(*prg)->philos[i].last_meal = get_current_time();
 		
 		if (ac == 6)
 			(*prg)->food = ft_atoi(av[5]);
@@ -132,7 +139,5 @@ int main(int ac, char **av)
 		init_mutex(&prg, ft_atoi(av[1]));
 		create_threads(prg, ft_atoi(av[1]));
 		join_threads(prg, ft_atoi(av[1]));
-		// printf("num of philos : %d\ntime to die : %d\ntime to eat : %d\ntime to sleep : %d\nfood : %d\n", 
-		// 		prg->num_of_philos, prg->time_to_die, prg->time_to_eat, prg->time_to_sleep, prg->food);
 	}
 } 

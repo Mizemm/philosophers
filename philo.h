@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:44 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/08 22:49:46 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/10 21:57:10 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_program
 	pthread_mutex_t		*forks;
 	pthread_mutex_t 	print;
 	pthread_mutex_t 	dead_lock;
+	pthread_mutex_t		last_meal_mut;
 	t_philos			*philos;
 }			t_program;
 
