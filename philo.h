@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:44 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/10 21:57:10 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/11 22:26:27 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,6 @@ typedef struct s_program
 void *routine(void *philo);
 size_t	get_current_time(void);
 void is_print(t_philos *philo, char *str);
+int special_one(t_program *prg);
 
 #endif

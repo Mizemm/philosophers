@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/10 22:43:35 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/11 22:25:16 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,13 @@ int main(int ac, char **av)
 		fill_struct(&prg, ac, av);
 		give_forks(&prg, ft_atoi(av[1]));
 		init_mutex(&prg, ft_atoi(av[1]));
-		create_threads(prg, ft_atoi(av[1]));
+		if (prg->num_of_philos == 1)
+		{
+			if (special_one(prg) == 1)
+				return (1);
+		}
+		else
+			create_threads(prg, ft_atoi(av[1]));
 		join_threads(prg, ft_atoi(av[1]));
 	}
 } 

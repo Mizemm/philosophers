@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 11:09:42 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/10 22:55:27 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/11 22:54:34 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,6 @@ void is_print(t_philos *philo, char *str)
 		printf("%zu %d %s\n", (get_current_time() - philo->program->start_time), philo->id, str);
 		pthread_mutex_unlock(&philo->program->print);
 	}
-	// else
-	// {
-	// 	pthread_mutex_lock(&philo->program->print);
-	// 	printf("%zu		%d		%s...\n", (get_current_time() - philo->program->start_time), philo->id, "died");
-	// 	pthread_mutex_unlock(&philo->program->print);
-	// 	exit(1);
-	// }
-
 }
 
 int is_sleeping(t_philos *philo)
@@ -101,7 +93,6 @@ int is_eating(t_philos *philo)
 	pthread_mutex_unlock(&philo->program->forks[philo->r_fork]);
 	return (0);
 }
-
 void *routine(void *param)
 {
 	t_philos *philo;
@@ -112,17 +103,28 @@ void *routine(void *param)
 	while (1)
 	{
 		is_thinking(philo);
-		// pthread_mutex_lock(&philo->program->dead_lock);
-		// if(philo->program->is_dead == 1)
-		// {
-		// 	pthread_mutex_unlock(&philo->program->dead_lock);
-		// 	break;
-		// }
-		// pthread_mutex_unlock(&philo->program->dead_lock);
 		if (is_eating(philo) == 1 || is_sleeping(philo) == 1)
 			break ;
 		is_thinking(philo);
 		usleep(250);
 	}
 	return (NULL);
+}
+void	*one_routine(void *param)
+{
+	t_philos *philo;
+
+	philo = param;
+	pthread_mutex_lock(&philo->program->forks[0]);
+	is_print(philo, "has taken a fork");
+	pthread_mutex_unlock(&philo->program->forks[0]);
+	is_usleep(philo->program->time_to_die, philo->program);
+	printf("%zu %d %s\n", (get_current_time() - philo->program->start_time), philo->program->philos[0].id, "died");
+	return (NULL);
+}
+int special_one(t_program *prg)
+{
+	pthread_create(&prg->philos[0].thread, NULL, &one_routine, &prg->philos[0]);
+	pthread_join(prg->philos[0].thread, NULL);
+	return (1);
 }
