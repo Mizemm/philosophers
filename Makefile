@@ -1,9 +1,9 @@
 PHILO = philo
-CC = cc
-CFLAGS = -Wall -Wextra -Werror #-fsanitize=address
+CC = cc 
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread -g
 
 PHILO_C = philo.c
-UTILS_C = routine.c utils/ft_atoi.c utils/ft_strlen.c
+UTILS_C = routine.c utils1.c utils2.c utils3.c utils/ft_atoi.c utils/ft_strlen.c
 
 PHILO_O = $(PHILO_C:.c=.o)
 UTILS_O = $(UTILS_C:.c=.o)

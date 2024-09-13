@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:44 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/13 17:52:30 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/13 22:33:28 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,14 @@ typedef struct s_program
 
 void *routine(void *philo);
 size_t	get_current_time(void);
+int  is_usleep(size_t milliseconds, t_program *prg);
 void is_print(t_philos *philo, char *str);
 int special_one(t_program *prg);
 int give_nmeals(t_philos *philo);
+void create_threads(t_program *prg, int philos);
+void join_threads(t_program *prg, int philos);
+int give_nmeals(t_philos *philo);
+int mutex_flag(t_philos *philo);
+void clear_all(t_program *prg);
 
 #endif
