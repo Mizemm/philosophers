@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 11:09:42 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/11 22:54:34 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/13 17:41:13 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,29 @@ int  is_usleep(size_t milliseconds, t_program *prg)
 	while ((get_current_time() - start) <= milliseconds)
 	{
 		pthread_mutex_lock(&prg->dead_lock);
-		if (prg->is_dead == 1)
+		pthread_mutex_lock(&prg->full_mut);
+		if (prg->is_dead == 1 || prg->full == 1)
 		{
 			pthread_mutex_unlock(&prg->dead_lock);
+			pthread_mutex_unlock(&prg->full_mut);
 			return (1);
 		}
+		pthread_mutex_unlock(&prg->full_mut);
 		pthread_mutex_unlock(&prg->dead_lock);
 		usleep(200);
 	}
 	return (0);
+}
+
+int give_nmeals(t_philos *philo)
+{
+	int n;
+	
+	n = 0;
+	pthread_mutex_lock(&philo->program->meals_mut);
+	n = philo->meals;
+	pthread_mutex_unlock(&philo->program->meals_mut);
+	return (n);
 }
 int mutex_flag(t_philos *philo)
 {
@@ -85,7 +99,10 @@ int is_eating(t_philos *philo)
 	philo->last_meal = get_current_time();
 	pthread_mutex_unlock(&philo->program->last_meal_mut);
 	is_print(philo, "is eating");
-	// update number of meals
+	pthread_mutex_lock(&philo->program->meals_mut);
+	philo->meals += 1;
+	pthread_mutex_unlock(&philo->program->meals_mut);
+	// printf("<%d>\n", philo->meals);
 	if (is_usleep(philo->program->time_to_eat, philo->program) == 1)
 		return (pthread_mutex_unlock(&philo->program->forks[philo->l_fork]),
 			pthread_mutex_unlock(&philo->program->forks[philo->r_fork]), 1);

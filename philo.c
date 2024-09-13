@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/11 22:25:16 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/13 17:53:27 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,35 @@ int check_deads(t_program *prg, int philos)
 	}
 	return (0);
 }
+int times_eaten(t_program *prg, int philos)
+{
+	int i = 0;
+	int nb = 0;
+	while (i < philos)
+	{
+		if (prg->philos[i].meals >= prg->food)
+			nb += 1;
+		i++;
+	}
+	if (nb == prg->num_of_philos)
+		return (1);
+	return (0);
+}
+int check_fulls(t_program *prg, int philos)
+{
+	int i = 0;
+	int flag = 0;
+
+	while (i < philos)
+	{
+		if (give_nmeals(&prg->philos[i]) < prg->food)
+			flag = 1;
+		i++;
+	}
+	if (flag == 0)
+		return (1);
+	return 0;
+}
 void create_threads(t_program *prg, int philos)
 {
 	int i;
@@ -57,8 +86,16 @@ void create_threads(t_program *prg, int philos)
 	}
 	while (1)
 	{
-		if (check_deads(prg, philos) == 1)
+		if (check_deads(prg, philos) == 1 && times_eaten(prg, philos) == 1)
 			break ;
+		if (prg->food != -1 && check_fulls(prg, prg->num_of_philos) == 1)
+		{
+			pthread_mutex_lock(&prg->full_mut);
+			prg->full = 1;
+			pthread_mutex_unlock(&prg->full_mut);
+			break;
+		}
+		usleep(50);
 	}
 }
 void init_mutex(t_program **prg, int philos)
@@ -70,6 +107,8 @@ void init_mutex(t_program **prg, int philos)
 	pthread_mutex_init(&(*prg)->print, NULL);
 	pthread_mutex_init(&(*prg)->dead_lock, NULL);
 	pthread_mutex_init(&(*prg)->last_meal_mut, NULL);
+	pthread_mutex_init(&(*prg)->meals_mut, NULL);
+	pthread_mutex_init(&(*prg)->full_mut, NULL);
 	while (i < philos)
 	{
 		pthread_mutex_init(&(*prg)->forks[i], NULL);
@@ -121,6 +160,7 @@ void fill_struct(t_program **prg, int ac, char **av)
 		(*prg)->philos[i].id = i + 1;
 		(*prg)->philos[i].program = *prg;
 		(*prg)->philos[i].last_meal = get_current_time();
+		(*prg)->philos[i].meals = 0;
 		
 		if (ac == 6)
 			(*prg)->food = ft_atoi(av[5]);
