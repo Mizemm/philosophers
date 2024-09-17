@@ -6,18 +6,20 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:27:33 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/13 22:37:39 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/17 23:45:35 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-void leaks()
+
+// void leaks()
+// {
+// 	system("leaks philo");
+// }
+
+void	init_mutex(t_program **prg, int philos)
 {
-	system("leaks philo");
-}
-void init_mutex(t_program **prg, int philos)
-{
-	int i;
+	int	i;
 
 	i = 0;
 	(*prg)->forks = malloc(philos * sizeof(pthread_mutex_t));
@@ -32,9 +34,12 @@ void init_mutex(t_program **prg, int philos)
 		i++;
 	}
 }
+
 void	give_forks(t_program **prg, int philos)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (philos == 1)
 	{
 		(*prg)->philos[i].l_fork = i + 1;
@@ -45,7 +50,7 @@ void	give_forks(t_program **prg, int philos)
 		while (i < philos)
 		{
 			if (philos - i == 1)
-			{				
+			{
 				(*prg)->philos[i].l_fork = i + 1;
 				(*prg)->philos[i].r_fork = 1;
 			}
@@ -55,13 +60,14 @@ void	give_forks(t_program **prg, int philos)
 				(*prg)->philos[i].r_fork = i + 2;
 			}
 			i++;
-		}	
+		}
 	}
 }
-void fill_struct(t_program **prg, int ac, char **av)
+
+void	fill_struct(t_program **prg, int ac, char **av)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	(*prg) = malloc(sizeof(t_program));
 	(*prg)->num_of_philos = ft_atoi(av[1]);
@@ -71,25 +77,25 @@ void fill_struct(t_program **prg, int ac, char **av)
 	(*prg)->start_time = get_current_time();
 	(*prg)->food = -1;
 	(*prg)->is_dead = 0;
-	(*prg)->philos = malloc(sizeof(t_philos) * ft_atoi(av[1]) + sizeof(t_philos));
+	(*prg)->philos = malloc(sizeof(t_philos) 
+			* ft_atoi(av[1]) + sizeof(t_philos));
 	while (i <= ft_atoi(av[1]))
 	{
 		(*prg)->philos[i].id = i + 1;
 		(*prg)->philos[i].program = *prg;
 		(*prg)->philos[i].last_meal = get_current_time();
 		(*prg)->philos[i].meals = 0;
-		
 		if (ac == 6)
 			(*prg)->food = ft_atoi(av[5]);
-		i++;			
+		i++;
 	}
 }
-int main(int ac, char **av)
+
+int	main(int ac, char **av)
 {
-	t_program *prg;
-	
+	t_program	*prg;
+
 	prg = NULL;
-	atexit(leaks);
 	if (ac == 5 || ac == 6)
 	{
 		fill_struct(&prg, ac, av);
@@ -99,7 +105,6 @@ int main(int ac, char **av)
 		{
 			if (special_one(prg) == 1)
 			{
-
 				clear_all(prg);
 				return (1);
 			}
@@ -109,4 +114,4 @@ int main(int ac, char **av)
 		join_threads(prg, ft_atoi(av[1]));
 		clear_all(prg);
 	}
-} 
+}

@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 22:25:28 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/13 22:34:54 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/17 23:43:26 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,31 @@
 
 void	*one_routine(void *param)
 {
-	t_philos *philo;
+	t_philos	*philo;
 
 	philo = param;
 	pthread_mutex_lock(&philo->program->forks[0]);
 	is_print(philo, "has taken a fork");
 	pthread_mutex_unlock(&philo->program->forks[0]);
 	is_usleep(philo->program->time_to_die, philo->program);
-	printf("%zu %d %s\n", (get_current_time() - philo->program->start_time), philo->program->philos[0].id, "died");
+	printf("%zu %d %s\n", (get_current_time()
+			- philo->program->start_time),
+		philo->program->philos[0].id, "died");
 	return (NULL);
 }
 
-int special_one(t_program *prg)
+int	special_one(t_program *prg)
 {
 	pthread_create(&prg->philos[0].thread, NULL, &one_routine, &prg->philos[0]);
 	pthread_join(prg->philos[0].thread, NULL);
 	return (1);
 }
-void clear_all(t_program *prg)
+
+void	clear_all(t_program *prg)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (i < prg->num_of_philos)
 	{
 		pthread_mutex_destroy(&prg->forks[i]);

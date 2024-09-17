@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/mizem/Desktop/cursus/philosophers",
-      "program": "/Users/mizem/Desktop/cursus/philosophers/build/Debug/outDebug"
+      "cwd": "/Users/mizem/Desktop/cursus/philo",
+      "program": "/Users/mizem/Desktop/cursus/philo/build/Debug/outDebug"
     }
   ]
 }

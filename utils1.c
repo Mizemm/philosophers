@@ -6,15 +6,17 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 22:21:41 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/13 22:23:09 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/16 18:06:06 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int check_deads(t_program *prg, int philos)
+int	check_deads(t_program *prg, int philos)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (i < philos)
 	{
 		pthread_mutex_lock(&prg->last_meal_mut);
@@ -24,7 +26,8 @@ int check_deads(t_program *prg, int philos)
 			prg->is_dead = 1;
 			pthread_mutex_unlock(&prg->dead_lock);
 			pthread_mutex_lock(&prg->print);
-			printf("%zu %d %s\n", (get_current_time() - prg->start_time), prg->philos[i].id, "died");
+			printf("%zu %d %s\n", (get_current_time() 
+					- prg->start_time), prg->philos[i].id, "died");
 			pthread_mutex_unlock(&prg->print);
 			pthread_mutex_unlock(&prg->last_meal_mut);
 			return (1);
@@ -34,10 +37,14 @@ int check_deads(t_program *prg, int philos)
 	}
 	return (0);
 }
-int times_eaten(t_program *prg, int philos)
+
+int	times_eaten(t_program *prg, int philos)
 {
-	int i = 0;
-	int nb = 0;
+	int	i;
+	int	nb;
+
+	i = 0;
+	nb = 0;
 	while (i < philos)
 	{
 		if (prg->philos[i].meals >= prg->food)
@@ -46,11 +53,14 @@ int times_eaten(t_program *prg, int philos)
 	}
 	return (nb);
 }
-int check_fulls(t_program *prg, int philos)
-{
-	int i = 0;
-	int flag = 0;
 
+int	check_fulls(t_program *prg, int philos)
+{
+	int	i;
+	int	flag;
+
+	i = 0;
+	flag = 0;
 	while (i < philos)
 	{
 		if (give_nmeals(&prg->philos[i]) < prg->food)
@@ -59,11 +69,12 @@ int check_fulls(t_program *prg, int philos)
 	}
 	if (flag == 0)
 		return (1);
-	return 0;
+	return (0);
 }
-void join_threads(t_program *prg, int philos)
+
+void	join_threads(t_program *prg, int philos)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < philos)
@@ -72,9 +83,10 @@ void join_threads(t_program *prg, int philos)
 		i++;
 	}
 }
-void create_threads(t_program *prg, int philos)
+
+void	create_threads(t_program *prg, int philos)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < philos)
@@ -86,12 +98,13 @@ void create_threads(t_program *prg, int philos)
 	{
 		if (check_deads(prg, philos) == 1)
 			break ;
-		if (prg->food != -1 && check_fulls(prg, prg->num_of_philos) == 1 && times_eaten(prg, philos) >= prg->num_of_philos)
+		if (prg->food != -1 && check_fulls(prg, prg->num_of_philos)
+			== 1 && times_eaten(prg, philos) >= prg->num_of_philos)
 		{
 			pthread_mutex_lock(&prg->full_mut);
 			prg->full = 1;
 			pthread_mutex_unlock(&prg->full_mut);
-			break;
+			break ;
 		}
 		usleep(50);
 	}

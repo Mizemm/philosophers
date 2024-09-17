@@ -6,7 +6,7 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 22:24:06 by mizem             #+#    #+#             */
-/*   Updated: 2024/09/13 22:24:37 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/16 18:07:40 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@ size_t	get_current_time(void)
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-int  is_usleep(size_t milliseconds, t_program *prg)
+int	is_usleep(size_t milliseconds, t_program *prg)
 {
-	(void)prg;
 	size_t	start;
+
 	start = get_current_time();
+	(void)prg;
 	while ((get_current_time() - start) <= milliseconds)
 	{
 		pthread_mutex_lock(&prg->dead_lock);
@@ -42,10 +43,11 @@ int  is_usleep(size_t milliseconds, t_program *prg)
 	}
 	return (0);
 }
-int give_nmeals(t_philos *philo)
+
+int	give_nmeals(t_philos *philo)
 {
-	int n;
-	
+	int	n;
+
 	n = 0;
 	pthread_mutex_lock(&philo->program->meals_mut);
 	n = philo->meals;
@@ -53,9 +55,9 @@ int give_nmeals(t_philos *philo)
 	return (n);
 }
 
-int mutex_flag(t_philos *philo)
+int	mutex_flag(t_philos *philo)
 {
-	int flag;
+	int	flag;
 
 	flag = 0;
 	pthread_mutex_lock(&philo->program->dead_lock);

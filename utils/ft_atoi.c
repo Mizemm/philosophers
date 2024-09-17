@@ -6,15 +6,15 @@
 /*   By: mizem <mizem@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 15:46:53 by mizem             #+#    #+#             */
-/*   Updated: 2024/08/21 16:50:46 by mizem            ###   ########.fr       */
+/*   Updated: 2024/09/16 17:43:23 by mizem            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int is_negative(char *str)
+int	is_negative(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -25,16 +25,18 @@ int is_negative(char *str)
 	}
 	return (0);
 }
-int is_valid(char c)
+
+int	is_valid(char c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);
 	else
 		return (0);
 }
+
 int	ft_atoi(char *str)
 {
-	int	i;
+	int		i;
 	long	result;
 
 	i = 0;
